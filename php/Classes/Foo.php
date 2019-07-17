@@ -9,6 +9,7 @@ namespace\djuarez11\object-oriented-project;
 use Ramsey\Uuid\Uuid;
 
 class author {
+	use ValidateUuid;
 	/**
 	 *id for this Author, primary key, obviously a required value
 	 **/
@@ -41,23 +42,18 @@ class author {
 	 * in the absence of an existing profile
 	 **/
 
-	public function getAuthorId(): Uuid {
+	public function getAuthorId() {
 		return ($this->authorId);
 	}
 
 	/**
 	 *Below I will set the mutator method for creating a new authorId. There are a few requirements for creating
 	 * a new authorId.
-	 * the @param Uuid for $newAuthorId must be a number,
-	 * @throws a type error if it is not a number
+	 * the @param int $newAuthorId new value of authorId
+	 * @throws UnexpectedValueException if $authorId is not an integer
+	 *
 	 **/
 
-
-	public function setAuthorId($newAuthorId): void {
-		try {
-			$uuid = self::validateUuid($newAuthorId);
-		} catch (\InvalidArgumentException| \RangeException|\Exception|\TypeError $exception)
-		$exceptionType = get_class($exception->);
-		throw(new $exceptionType($exception->getMessage(), 0, $exception));
-	}}
+	public function setAuthorId($newAuthorId) {
+	}
 }
