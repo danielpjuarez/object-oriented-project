@@ -137,7 +137,7 @@ public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 			throw (new\RangeException("user activation is not valid"));
 		}
 		//make sure user activation token is only 32 characters
-		if(strlen($newAuthorActivationToken) !==32 {
+		if(strlen($newAuthorActivationToken) !==32) {
 			throw(new\RangeException("user activation token has to be 32 characters"));
 		}
 		$this->authorActivationToken=$newAuthorActivationToken;
@@ -145,7 +145,7 @@ public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 
 /**
  * This is the accessor method for authorEmail.
- * @return string value of emial
+ * @return string value of email
  */
 public function getAuthorEmail(): string {
 	return $this->AuthorEmail;
@@ -172,5 +172,19 @@ public function setAuthorEmail (string $newAuthorEmail): void {
 	}
 }
 
+	/**
+	 * This is the accessor method for authorHash
+	 * @return string value of authorHash
+	 */
+public function getAuthorHash (): string {
+	return $this->authorHash;
+}
 
+/**
+ * This is the mutator method for authorHash
+ * @param string $newAuthorHash new value of authorHash
+ * @throws \InvalidArgumentException if hash is not secure
+ * @throws \RangeException if the hash is not 128 characters
+ * @throws
+ */
 }
