@@ -162,7 +162,14 @@ public function getAuthorEmail(): string {
 public function setAuthorEmail (string $newAuthorEmail): void {
 
 	//verify email is secure
-	$newAuthorEmail=trim()
+	$newAuthorEmail=trim($newAuthorEmail);
+	$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
+	if (empty($newProfileEmail)===true) {
+		throw(new\RangeExpcetion("profile email is too large"));
+
+	//store the email
+	$this->authorEmail = $newAuthorEmail;
+	}
 }
 
 
