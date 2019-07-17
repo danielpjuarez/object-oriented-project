@@ -92,10 +92,40 @@ public function setAuthorId($newAuthorId): void {
 		$exceptionType=get_class($exception);
 		throw(new$exceptionType($exception->getMessage(),0, $exception));
 	}
-	//convert and store the tweet id
+	//convert and store the author id
 	$this->authorId=$uuid;
-
 }
+/**
+ * accessor method for authorAvatarUrl
+ * @return string value of activationAuthorUrl
+ */
+public function getAuthorAvatarUrl() : ?string {
+	return ($this->authorAvatarUrl);
+}
+/**
+ *mutator method for authorAvatarUrl
+ * @param string $newAuthorAvatarUrl new value of Author Avatar Url
+ * @throws \InvalidArgumentException if $newProfileAvatarUrl is not a string or insecure
+ * @throws \RangeException if $newProfileAvatarURl is > 255 characters
+ */
+
+public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
+	$newAuthorAvatarUrl=trim($newAuthorAvatarUrl);
+	$newAuthorAvatarUrl=filter_var($newAuthorAvatarUrl, FILTER_SANTIZE_STRING, FILTER_VALIDATE_URL);
+}
+	/**
+	 * accessor method for authorActivationToken
+	 * @return string value of authorActivationToken
+	 */
+	public function getAuthorActivationToken() : ?string {
+		return ($this->authorActivationToken);
+	}
+	/**
+	 *mutator method for authorActivationToken
+	 * @param string $newAuthorActivationToken new value of Author Avatar Url
+	 * @throws \InvalidArgumentException if $newAuthorActivationToken is not a string or insecure
+	 * @throws \RangeException if $newAuthorActivationToken is > 255 characters
+	 */
 
 
 }
