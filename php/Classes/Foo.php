@@ -164,11 +164,11 @@ public function setAuthorEmail (string $newAuthorEmail): void {
 	//verify email is secure
 	$newAuthorEmail=trim($newAuthorEmail);
 	$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
-	if (empty($newProfileEmail)===true) {
-		throw(new\RangeExpcetion("profile email is too large"));
+	if (empty($newAuthorEmail)===true) {
+		throw(new\RangeExpectation("author email is too large"));
 
 	//store the email
-	$this->authorEmail = $newAuthorEmail;
+	$this->authorEmail=$newAuthorEmail;
 	}
 }
 
@@ -184,7 +184,30 @@ public function getAuthorHash (): string {
  * This is the mutator method for authorHash
  * @param string $newAuthorHash new value of authorHash
  * @throws \InvalidArgumentException if hash is not secure
- * @throws \RangeException if the hash is not 128 characters
- * @throws
+ * @throws \RangeException if the authorHash is not 128 characters
+ * @throws \TypeError if authorHash is not a string
  */
+
+	public function setAuthorHash($newAuthorHash): void {
+	//enforce that the hash is properly formatted
+	$newAuthorHash= trim($newAuthorHash);
+	if(empty($newAuthorHash)===true){
+		throw(new\InvalidArgumentException("profile password hash empty or insecure"));
+		}
+
+	//enforce the has is an Argon hash
+	$authorHashInfo=password_get_info($newAuthorHash);
+	if($authorHashInfo["algoName"]!=="argon2i") {
+			throw(new \InvalidArgumentException("profile hash is not a valid hash"));
+		}
+
+	//enforce that the hash is exactly 128 characters
+	if(strlen($newAuthorHash)!==128) {
+		throw(new \RangeException("profile hash must be 128 characters"));
+	}
+	//store the hash
+		$this->authorHash=$newAuthorHash;
+	}
+
+
 }
