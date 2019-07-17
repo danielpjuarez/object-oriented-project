@@ -124,8 +124,24 @@ public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 	 *mutator method for authorActivationToken
 	 * @param string $newAuthorActivationToken new value of Author Avatar Url
 	 * @throws \InvalidArgumentException if $newAuthorActivationToken is not a string or insecure
-	 * @throws \RangeException if $newAuthorActivationToken is > 255 characters
+	 * @throws \RangeException if $newAuthorActivationToken is not exactly 32 characters
+	 * @throws \TypeError if the activation token is not a string
 	 */
+
+	public function setAuthorActivationToken(?string $newAuthorActivationToken): void {
+		if ($newAuthorActivationToken ===null) {
+			$this->ProfileActivationToken = null;
+			return;
+		}
+		if(ctype_xdigit ($newAuthorActivationToken) ===false) {
+			throw (new\RangeException("user activation is not valid"));
+		}
+		//make sure user activation token is only 32 characters
+		if(strlen($newAuthorActivationToken) !==32 {
+			throw(new\RangeException("user activation token has to be 32 characters"));
+		}
+		$this->authorActivationToken=$newAuthorActivationToken;
+}
 
 
 }
