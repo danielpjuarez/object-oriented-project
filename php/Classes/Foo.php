@@ -165,8 +165,12 @@ public function setAuthorEmail (string $newAuthorEmail): void {
 	$newAuthorEmail=trim($newAuthorEmail);
 	$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
 	if (empty($newAuthorEmail)===true) {
-		throw(new\RangeExpectation("author email is too large"));
+		throw(new\RangeException("author email empty or insecure"));
 
+	//verify the email will fit in the database
+		if(strlen($newAuthorEmail) > 128) {
+			throw(new \RangeException("author email address is too large"));
+		}
 	//store the email
 	$this->authorEmail=$newAuthorEmail;
 	}
@@ -209,5 +213,49 @@ public function getAuthorHash (): string {
 		$this->authorHash=$newAuthorHash;
 	}
 
+	/**
+	 * accessor method for authorUsername
+	 * @return string authorUsername
+	 */
+	/**
+	 * @return mixed
+	 */
+	public function getAuthorUsername(): string {
+		return $this->authorUsername;
+	}
 
+	/**
+	 * mutator method for authorUsername
+	 * @param string $newAuthorUsername new value of authorUsername
+	 * @throws \invalidArgumentException if authorUsername is not secure or is null
+	 * @throws \typeError if authorUsername is not a string
+	 * @throws \RangeExceptionif authorUsername is >32 characters
+	 */
+
+	/**
+	 * @param mixed $authorUsername
+	 */
+	public function setAuthorUsername(?string $newauthorUsername): void {
+		//if $AuthorUsername is null
+		if($newauthorUsername===null){
+			$this->authorUsername=null;
+			return;
+		}
+
+		//verify the username is secure
+		$newauthorUsername=trim($newauthorUsername);
+		$newauthorUsername=filter_var($newauthorUsername, FILTER_SANTIZE_STRING);
+		if(empty($newauthorUsername)===true){
+			throw(new\InvalidArgumentException("author username is empty or insecure"));
+		}
+
+		//verify the username will fit in the database
+		if(strlen($newauthorUsername)>32) {
+			throw(new\InvalidArgumentException("username is too long"));
+		}
+
+		//store the username
+		$this->authorUsername=$newauthorUsername;
+	}
 }
+
