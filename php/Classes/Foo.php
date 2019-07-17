@@ -143,5 +143,27 @@ public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 		$this->authorActivationToken=$newAuthorActivationToken;
 }
 
+/**
+ * This is the accessor method for authorEmail.
+ * @return string value of emial
+ */
+public function getAuthorEmail(): string {
+	return $this->AuthorEmail;
+}
+
+/**
+ * mutator method for authorEmail
+ * @param string $newAuthorEmail new value of authorEmail
+ * @throws \InvalidArgumentException if $newAuthorEmail is not a valid email or insecure
+ * @throws \RangeException if $newAuthorEmail is >128 characters
+ * @throws \TypeError if $newAuthorEmail is not a string
+ */
+
+public function setAuthorEmail (string $newAuthorEmail): void {
+
+	//verify email is secure
+	$newAuthorEmail=trim()
+}
+
 
 }
