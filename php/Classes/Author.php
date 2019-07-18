@@ -7,11 +7,11 @@ namespace djuarez11\objectorientedproject;
  */
 
 
-require_once (dirname(__dir__)."vendor/autoload.php");
+require_once(dirname(__DIR__)."/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 
-class author {
+class author implements \jsonSerialize {
 	use ValidateDate;
 	use ValidateUuid;
 	/**
@@ -194,24 +194,26 @@ public function getAuthorHash (): string {
 
 	public function setAuthorHash($newAuthorHash): void {
 	//enforce that the hash is properly formatted
-	$newAuthorHash= trim($newAuthorHash);
-	if(empty($newAuthorHash)===true){
-		throw(new\InvalidArgumentException("profile password hash empty or insecure"));
-		}
+		$newAuthorHash= trim($newAuthorHash);
+		if(empty($newAuthorHash)===true){
+			throw(new\InvalidArgumentException("profile password hash empty or insecure"));
+			}
 
-	//enforce the has is an Argon hash
-	$authorHashInfo=password_get_info($newAuthorHash);
-	 {
-			throw(new \InvalidArgumentException("profile hash is not a valid hash"));
-		}
+		//enforce the has is an Argon hash
+		$authorHashInfo=password_get_info($newAuthorHash);
+		if($authorHashInfo["algoName"] !=="argon2i")
 
-	//enforce that the hash is exactly 8 characters
-	if(strlen($newAuthorHash)!==8) {
-		throw(new \RangeException("profile hash must be 8 characters"));
-	}
-	//store the hash
-		$this->authorHash=$newAuthorHash;
-	}
+		 {
+				throw(new \InvalidArgumentException("profile hash is not a valid hash"));
+			}
+
+		//enforce that the hash is exactly 97 characters
+		if(strlen($newAuthorHash)!==97) {
+			throw(new \RangeException("profile hash must be 97 characters"));
+		}
+		//store the hash
+			$this->authorHash=$newAuthorHash;
+		}
 
 	/**
 	 * accessor method for authorUsername
@@ -256,6 +258,39 @@ public function getAuthorHash (): string {
 
 		//store the username
 		$this->authorUsername=$newauthorUsername;
+	}
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+
+	/**
+	 * inserts this Author into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo) : void {
+
+		// create query template
+		$query = "INSERT INTO Author(authorId,authorAvatarUrl, authorActivationToken, authorEmail, authorhash, authorUsername)
+ 	VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :authorHash, authorHash)";
+		$statement = $pdo->prepare($query);
+	}
+
+	public function jsonSerialize() : array {
+		$fields = get_object_vars($this);
+
+		$fields["authorId"] = $this->authorId->toString();
+		$fields["authorAvatarUrl"] = $this->authorAvatarUrl->toString();
+		$fields["authorActivationToken"] = $this->authorActivationToken->toString();
+		$fields["authorEmail"] = $this->authorEmail->toString();
+		$fields["authorHash"] = $this->authorHash->toString();
+		$fields["authorUsername"] = $this->authorUsername->toString();
+
+		return ($fields);
 	}
 }
 
