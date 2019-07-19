@@ -6,12 +6,12 @@ namespace djuarez11\objectorientedproject;
  * about an author for the purpose of categorizing them
  */
 
-
+require_once "autoload.php";
 require_once(dirname(__DIR__)."/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 
-class author implements \jsonSerialize {
+class author implements \JsonSerializable {
 	use ValidateDate;
 	use ValidateUuid;
 	/**
@@ -165,7 +165,7 @@ public function setAuthorEmail (string $newAuthorEmail): void {
 	$newAuthorEmail=trim($newAuthorEmail);
 	$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
 	if (empty($newAuthorEmail)===true) {
-		throw(new\RangeException("author email empty or insecure"));
+		throw(new\InvalidArgumentException("author email empty or insecure"));
 
 	//verify the email will fit in the database
 		if(strlen($newAuthorEmail) > 128) {
@@ -214,6 +214,9 @@ public function getAuthorHash (): string {
 		//store the hash
 			$this->authorHash=$newAuthorHash;
 		}
+	/**
+	 *@return authorhash from password
+	 */
 
 	/**
 	 * accessor method for authorUsername
@@ -280,15 +283,13 @@ public function getAuthorHash (): string {
 		$statement = $pdo->prepare($query);
 	}
 
+	/**
+	 * formats state variables for JSON serialization
+	 * @return array resulting state variables to serialize
+	 */
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
-
 		$fields["authorId"] = $this->authorId->toString();
-		$fields["authorAvatarUrl"] = $this->authorAvatarUrl->toString();
-		$fields["authorActivationToken"] = $this->authorActivationToken->toString();
-		$fields["authorEmail"] = $this->authorEmail->toString();
-		$fields["authorHash"] = $this->authorHash->toString();
-		$fields["authorUsername"] = $this->authorUsername->toString();
 
 		return ($fields);
 	}
