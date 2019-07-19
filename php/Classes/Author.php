@@ -99,19 +99,28 @@ public function setAuthorId($newAuthorId): void {
  * accessor method for authorAvatarUrl
  * @return string value of activationAuthorUrl
  */
-public function getAuthorAvatarUrl() : ?string {
+public function getAuthorAvatarUrl() : string {
 	return ($this->authorAvatarUrl);
 }
 /**
  *mutator method for authorAvatarUrl
  * @param string $newAuthorAvatarUrl new value of Author Avatar Url
- * @throws \InvalidArgumentException if $newProfileAvatarUrl is not a string or insecure
- * @throws \RangeException if $newProfileAvatarURl is > 255 characters
+ * @throws \InvalidArgumentException if $newAuthorAvatarUrl is not a string or insecure
+ * @throws \RangeException if $newAuthorAvatarURl is > 255 characters
+ * @throws \TypeError if $newAtHandle is not a  string
  */
 
-public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
-	$newAuthorAvatarUrl=trim($newAuthorAvatarUrl);
-	$newAuthorAvatarUrl=filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_VALIDATE_URL);
+public function setAuthorAvatarUrl(string $newAuthorAvatarUrl) : void {
+
+	$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
+	$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+	//verify the avatar URL will fit in database
+	if(strlen($newAuthorAvatarUrl)>255){
+		throw(new \RangeException("image cloudinary content too large"));
+	}
+	//store the image cloudinary content
+	$this->authorAvatarUrl = $newAuthorAvatarUrl;
 }
 	/**
 	 * accessor method for authorActivationToken
@@ -130,7 +139,7 @@ public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 
 	public function setAuthorActivationToken(?string $newAuthorActivationToken): void {
 		if ($newAuthorActivationToken ===null) {
-			$this->ProfileActivationToken = null;
+			$this->AuthorActivationToken = null;
 			return;
 		}
 		if(ctype_xdigit ($newAuthorActivationToken) ===false) {
@@ -160,20 +169,20 @@ public function getAuthorEmail(): string {
  */
 
 public function setAuthorEmail (string $newAuthorEmail): void {
-
 	//verify email is secure
 	$newAuthorEmail=trim($newAuthorEmail);
 	$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
-	if (empty($newAuthorEmail)===true) {
+	if (empty($newAuthorEmail) === true) {
 		throw(new\InvalidArgumentException("author email empty or insecure"));
-
+	}
 	//verify the email will fit in the database
 		if(strlen($newAuthorEmail) > 128) {
 			throw(new \RangeException("author email address is too large"));
 		}
-	//store the email
+
+	//store the mmial
 	$this->authorEmail=$newAuthorEmail;
-	}
+
 }
 
 	/**
@@ -215,7 +224,7 @@ public function getAuthorHash (): string {
 			$this->authorHash=$newAuthorHash;
 		}
 	/**
-	 *@return authorhash from password
+	 *@return authorHash from password
 	 */
 
 	/**
@@ -234,7 +243,7 @@ public function getAuthorHash (): string {
 	 * @param string $newAuthorUsername new value of authorUsername
 	 * @throws \invalidArgumentException if authorUsername is not secure or is null
 	 * @throws \typeError if authorUsername is not a string
-	 * @throws \RangeExceptionif authorUsername is >32 characters
+	 * @throws \RangeException if authorUsername is >32 characters
 	 */
 
 	/**
@@ -293,5 +302,5 @@ public function getAuthorHash (): string {
 
 		return ($fields);
 	}
-}
 
+}
