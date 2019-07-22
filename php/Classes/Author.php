@@ -362,16 +362,19 @@ public function getAuthorHash (): string {
 
 		//grab the author from mySQL
 		try {
-			$author=null;
-			$statement ->setFetchMode(\PDO::FETCH_ASSOC);
+			$author = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
-			if ($row !== false) {
+			if($row !== false) {
 				$author = new Author($row["authorId"], $row[authorAvatarUrl], $row[authorEmail],
 					$row[authorHash], $row[authorActivationToken], $row [authorUsername]);
 			}
-
+		}catch(\Exception $exception) {
+				//if the row couldn't be converted, rethrow it
+			throw (new\PDOException($exception->getMessage(),0,$exception));
+			}
+		return ($author);
 		}
-	}
 	/**
 	 *
 	 */
