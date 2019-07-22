@@ -286,10 +286,18 @@ public function getAuthorHash (): string {
 	 **/
 	public function insert(\PDO $pdo) : void {
 
-		// create query template
-		$query = "INSERT INTO Author(authorId,authorAvatarUrl, authorActivationToken, authorEmail, authorhash, authorUsername)
- 	VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :authorHash, authorHash)";
+		// template for query
+		$query = "INSERT INTO Author(authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername)
+ 		VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :authorHash, authorHash)";
 		$statement = $pdo->prepare($query);
+		//this binds the member variables to the placeholders in the template
+		$parameters= ["authorId"=>$this->authorId->getBytes(),
+			"authorAvatarUrl"=>$this->authorAvatarUrl->getBytes(),
+			"authorActivationToken"=>$this->authorActivationToken->getBytes(),
+			"authorEmail"=>$this->authorEmail->getBytes(),
+			"authorHash"=>$this->authorHash->getBytes(),
+			"authorUsername"=>$this->authorUsername->getBytes()];
+		$statement->execute($parameters);
 	}
 
 	/**
