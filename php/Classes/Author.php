@@ -290,7 +290,8 @@ public function getAuthorHash (): string {
 		$query = "INSERT INTO Author(authorId, authorAvatarUrl, authorActivationToken, authorEmail, authorHash, authorUsername)
  		VALUES(:authorId, :authorAvatarUrl, :authorActivationToken, :authorEmail, :authorHash, authorHash)";
 		$statement = $pdo->prepare($query);
-		//this binds the member variables to the placeholders in the template
+		//this binds the member variables to the placeholders in the template. note to self:
+		//"getBytes" converts string into bytes
 		$parameters= ["authorId"=>$this->authorId->getBytes(),
 			"authorAvatarUrl"=>$this->authorAvatarUrl->getBytes(),
 			"authorActivationToken"=>$this->authorActivationToken->getBytes(),
@@ -298,6 +299,22 @@ public function getAuthorHash (): string {
 			"authorHash"=>$this->authorHash->getBytes(),
 			"authorUsername"=>$this->authorUsername->getBytes()];
 		$statement->execute($parameters);
+	}
+
+	/**template for updating an author in sql
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function update(\PDO $pdo): void {
+	//this part is a query template to select values to be changed
+	$query= "UPDATE author SET authorProfileId=:authorProfileId, 
+	authorAvatarUrl=:authorAvatarUrl
+	authorActivationToken=:authorActivationToken, 
+	authorEmail=:authorEmail,
+	authorHash=:authorHash, 
+	authorUsername=:authorUsername";
+	$statement=$pdo->prepare($query);
 	}
 
 	/**
