@@ -375,9 +375,38 @@ public function getAuthorHash (): string {
 			}
 		return ($author);
 		}
+
 	/**
-	 *
+	 *this method will return an full array of authors
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of Authors found or null if not found
+	 * @throws \PDOExceptionwhen mySQL related errors occur
+	 * @throws \TypeErrorwhen varaibles are not the correct data type
 	 */
+	public static function getAllAuthors (\PDO $pdo): \SPLFixedArray {
+		//create query template
+		$query = "select authorId, authorAvatarUrl, authorEmail, 
+		authorHash, authorActivationToken, authorUsername FROM author";
+		$statement =$pdo ->prepare ($query);
+		$statement ->execute ();
+
+		//build an array of authors
+		$authors =new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode((\PDO::FETCH_ASSOC));
+		while (($row=$statement->fetch())!==false) {
+			try {
+				$author = new author ($row["authorId"], $row[authorAvatarUrl], $row[authorEmail],
+					$row[authorHash], $row[authorActivationToken], $row [authorUsername] );
+					$author[$author->key()]=$author;
+					$author->next();
+			}
+			catch(\Exception$exception){
+				//if the row couldn't be converted, rethrow it
+			throw (new \PDOException($exception->getMessage(),0, $exception));
+			}
+		return ($authors);
+		}
+	}
 /*
  * formats state variables for JSON serialization
  * @return array resulting state variables to serialize
