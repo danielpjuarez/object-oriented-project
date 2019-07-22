@@ -318,9 +318,25 @@ public function getAuthorHash (): string {
 	}
 
 	/**
-	 * formats state variables for JSON serialization
-	 * @return array resulting state variables to serialize
+	 * deletes author from mySQL
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
 	 */
+	public function delete (\PDO $pdo) : void {
+		//create query template
+		$query = "DELETE FROM author WHERE authorId=:authorId";
+		$statement = $pdo->prepare($query);
+		//bind the member variables to the placeholder in the template
+		$parameters = ["authorId"=>$this->authorId->getBytes()];
+		$statement->execute($parameters);
+		}
+
+/*
+ * formats state variables for JSON serialization
+ * @return array resulting state variables to serialize
+ */
+
 	public function jsonSerialize() : array {
 		$fields = get_object_vars($this);
 		$fields["authorId"] = $this->authorId->toString();
