@@ -40,68 +40,68 @@ class author implements \JsonSerializable {
 	 */
 	private $authorUsername;
 
-/**constructor for this author
- *@param string|Uuid $newAuthorId id of this author or null if new author
- *@param string|Uuid $newAuthorAvatarUrl id of the author's avatar URL
- *@param string $newAuthorActivationToken string containing author's activation token
- *@param string $newAuthorEmail string containing author's email address
- *@param string $newAuthorHash string containing author's hash
- *@param string $newAuthorUsername string containing author's username
- *@throws \InvalidArgumentException if data types are not valid
- *@throws \RangeException if data values are out of bounds
- * @throws \TypeError if data types violate type hints
- * @throws \Exception if there is another exception
-**/
+	/**constructor for this author
+	 *@param string|Uuid $newAuthorId id of this author or null if new author
+	 *@param string|Uuid $newAuthorAvatarUrl id of the author's avatar URL
+	 *@param string $newAuthorActivationToken string containing author's activation token
+	 *@param string $newAuthorEmail string containing author's email address
+	 *@param string $newAuthorHash string containing author's hash
+	 *@param string $newAuthorUsername string containing author's username
+	 *@throws \InvalidArgumentException if data types are not valid
+	 *@throws \RangeException if data values are out of bounds
+	 * @throws \TypeError if data types violate type hints
+	 * @throws \Exception if there is another exception
+	**/
 
-public function __construct($newAuthorId, $newAuthorAvatarUrl, $newAuthorActivationToken,
-$newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
-	try {
-			$this->setAuthorID($newAuthorId);
-			$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
-			$this->setAuthorActivationToken($newAuthorActivationToken);
-			$this->setAuthorEmail($newAuthorEmail);
-			$this->setAuthorHash($newAuthorHash);
-			$this->setAuthorUsername($newAuthorUsername);
-		}
-		//determining what exception type is thrown, if any
-		catch(\invalidArgumentException|\RangeException|\Exception|\TypeError $exception) {
-			$exceptionType=get_class($exception);
-			throw(new $exceptionType($exception->getMessage(),0,$exception));
-		}
+	public function __construct($newAuthorId, $newAuthorAvatarUrl, $newAuthorActivationToken,
+	$newAuthorEmail, $newAuthorHash, $newAuthorUsername) {
+		try {
+				$this->setAuthorID($newAuthorId);
+				$this->setAuthorAvatarUrl($newAuthorAvatarUrl);
+				$this->setAuthorActivationToken($newAuthorActivationToken);
+				$this->setAuthorEmail($newAuthorEmail);
+				$this->setAuthorHash($newAuthorHash);
+				$this->setAuthorUsername($newAuthorUsername);
+			}
+			//determining what exception type is thrown, if any
+			catch(\invalidArgumentException|\RangeException|\Exception|\TypeError $exception) {
+				$exceptionType=get_class($exception);
+				throw(new $exceptionType($exception->getMessage(),0,$exception));
+			}
 
-}
-
-/**
- *accessor method for author id
- * @return Uuid value of author id
- */
-public function getAuthorId():Uuid{
-	return($this->authorId);
-}
-
-/**
- * mutator method for author id
- * @param Uuid|string $newAuthorId new value of author id
- * @throws \RangeException if $newAuthorId is not positive
- * @throws \TypeError if $newAuthorId is not a uuid or string
- */
-public function setAuthorId($newAuthorId): void {
-	try {
-		$uuid =self::validateUuid($newAuthorId);
-	} catch (\invalidArgumentException |\RangeException|\Exception|\TypeError $exception) {
-		$exceptionType=get_class($exception);
-		throw(new$exceptionType($exception->getMessage(),0, $exception));
 	}
-	//convert and store the author id
-	$this->authorId=$uuid;
-}
+
+	/**
+	 *accessor method for author id
+	 * @return Uuid value of author id
+	 */
+	public function getAuthorId():Uuid{
+		return($this->authorId);
+	}
+
+	/**
+	 * mutator method for author id
+	 * @param Uuid|string $newAuthorId new value of author id
+	 * @throws \RangeException if $newAuthorId is not positive
+	 * @throws \TypeError if $newAuthorId is not a uuid or string
+	 */
+	public function setAuthorId($newAuthorId): void {
+		try {
+			$uuid =self::validateUuid($newAuthorId);
+		} catch (\invalidArgumentException |\RangeException|\Exception|\TypeError $exception) {
+			$exceptionType=get_class($exception);
+			throw(new$exceptionType($exception->getMessage(),0, $exception));
+		}
+		//convert and store the author id
+		$this->authorId=$uuid;
+	}
 /**
  * accessor method for authorAvatarUrl
  * @return string value of activationAuthorUrl
  */
-public function getAuthorAvatarUrl() : string {
-	return ($this->authorAvatarUrl);
-}
+	public function getAuthorAvatarUrl() : string {
+		return ($this->authorAvatarUrl);
+	}
 /**
  *mutator method for authorAvatarUrl
  * @param string $newAuthorAvatarUrl new value of Author Avatar Url
@@ -110,17 +110,17 @@ public function getAuthorAvatarUrl() : string {
  * @throws \TypeError if $newAtHandle is not a  string
  */
 
-public function setAuthorAvatarUrl(string $newAuthorAvatarUrl) : void {
+	public function setAuthorAvatarUrl(string $newAuthorAvatarUrl) : void {
 
-	$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
-	$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
+		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
-	//verify the avatar URL will fit in database
-	if(strlen($newAuthorAvatarUrl)>255){
-		throw(new \RangeException("image cloudinary content too large"));
-	}
-	//store the image cloudinary content
-	$this->authorAvatarUrl = $newAuthorAvatarUrl;
+		//verify the avatar URL will fit in database
+		if(strlen($newAuthorAvatarUrl)>255){
+			throw(new \RangeException("image cloudinary content too large"));
+		}
+		//store the image cloudinary content
+		$this->authorAvatarUrl = $newAuthorAvatarUrl;
 }
 	/**
 	 * accessor method for authorActivationToken
@@ -152,54 +152,54 @@ public function setAuthorAvatarUrl(string $newAuthorAvatarUrl) : void {
 		$this->authorActivationToken=$newAuthorActivationToken;
 }
 
-/**
- * This is the accessor method for authorEmail.
- * @return string value of email
- */
-public function getAuthorEmail(): string {
-	return $this->AuthorEmail;
-}
-
-/**
- * mutator method for authorEmail
- * @param string $newAuthorEmail new value of authorEmail
- * @throws \InvalidArgumentException if $newAuthorEmail is not a valid email or insecure
- * @throws \RangeException if $newAuthorEmail is >128 characters
- * @throws \TypeError if $newAuthorEmail is not a string
- */
-
-public function setAuthorEmail (string $newAuthorEmail): void {
-	//verify email is secure
-	$newAuthorEmail=trim($newAuthorEmail);
-	$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
-	if (empty($newAuthorEmail) === true) {
-		throw(new\InvalidArgumentException("author email empty or insecure"));
+	/**
+	 * This is the accessor method for authorEmail.
+	 * @return string value of email
+	 */
+	public function getAuthorEmail(): string {
+		return $this->AuthorEmail;
 	}
-	//verify the email will fit in the database
-		if(strlen($newAuthorEmail) > 128) {
-			throw(new \RangeException("author email address is too large"));
+
+	/**
+	 * mutator method for authorEmail
+	 * @param string $newAuthorEmail new value of authorEmail
+	 * @throws \InvalidArgumentException if $newAuthorEmail is not a valid email or insecure
+	 * @throws \RangeException if $newAuthorEmail is >128 characters
+	 * @throws \TypeError if $newAuthorEmail is not a string
+	 */
+
+	public function setAuthorEmail (string $newAuthorEmail): void {
+		//verify email is secure
+		$newAuthorEmail=trim($newAuthorEmail);
+		$newAuthorEmail=filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
+		if (empty($newAuthorEmail) === true) {
+			throw(new\InvalidArgumentException("author email empty or insecure"));
 		}
+		//verify the email will fit in the database
+			if(strlen($newAuthorEmail) > 128) {
+				throw(new \RangeException("author email address is too large"));
+			}
 
-	//store the mmial
-	$this->authorEmail=$newAuthorEmail;
+		//store the mmial
+		$this->authorEmail=$newAuthorEmail;
 
-}
+	}
 
 	/**
 	 * This is the accessor method for authorHash
 	 * @return string value of authorHash
 	 */
-public function getAuthorHash (): string {
-	return $this->authorHash;
-}
+	public function getAuthorHash (): string {
+		return $this->authorHash;
+	}
 
-/**
- * This is the mutator method for authorHash
- * @param string $newAuthorHash new value of authorHash
- * @throws \InvalidArgumentException if hash is not secure
- * @throws \RangeException if the authorHash is not 128 characters
- * @throws \TypeError if authorHash is not a string
- */
+	/**
+	 * This is the mutator method for authorHash
+	 * @param string $newAuthorHash new value of authorHash
+	 * @throws \InvalidArgumentException if hash is not secure
+	 * @throws \RangeException if the authorHash is not 128 characters
+	 * @throws \TypeError if authorHash is not a string
+	 */
 
 	public function setAuthorHash($newAuthorHash): void {
 	//enforce that the hash is properly formatted
