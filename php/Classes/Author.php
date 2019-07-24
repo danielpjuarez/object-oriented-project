@@ -301,19 +301,20 @@ public function getAuthorHash (): string {
 		$statement->execute($parameters);
 	}
 
-	/**template for updating an author in sql
+	/**
+	 * template for updating an author in sql
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object
 	 **/
 	public function update(\PDO $pdo): void {
 	//this part is a query template to select values to be changed
-	$query= "UPDATE author SET authorProfileId=:authorProfileId, 
-	authorAvatarUrl=:authorAvatarUrl
-	authorActivationToken=:authorActivationToken, 
-	authorEmail=:authorEmail,
-	authorHash=:authorHash, 
-	authorUsername=:authorUsername";
+		$query= "UPDATE author SET authorProfileId=:authorProfileId, 
+		authorAvatarUrl=:authorAvatarUrl
+		authorActivationToken=:authorActivationToken, 
+		authorEmail=:authorEmail,
+		authorHash=:authorHash, 
+		authorUsername=:authorUsername";
 	$statement=$pdo->prepare($query);
 	}
 
